@@ -1,0 +1,7 @@
+﻿<Window xmlns:my="clr-namespace:FoodOrder.Views"  x:Class="FoodOrder.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Subshop Order System" Width="1024" Height="600" Background="White" WindowStartupLocation="CenterScreen">
+    <Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,229 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="FoodOrderDatabaseModel.Store" Alias="Self" Provider="System.Data.SqlServerCe.3.5" ProviderManifestToken="3.5" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="FoodOrderDatabaseModelStoreContainer">
+          <EntitySet Name="OrderItems" EntityType="FoodOrderDatabaseModel.Store.OrderItems" store:Type="Tables" />
+          <EntitySet Name="TransactionItems" EntityType="FoodOrderDatabaseModel.Store.TransactionItems" store:Type="Tables" />
+          <EntitySet Name="Transactions" EntityType="FoodOrderDatabaseModel.Store.Transactions" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="FoodOrderDatabaseModel.Store.Users" store:Type="Tables" />
+          <AssociationSet Name="transactionid" Association="FoodOrderDatabaseModel.Store.transactionid">
+            <End Role="Transactions" EntitySet="Transactions" />
+            <End Role="TransactionItems" EntitySet="TransactionItems" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="OrderItems">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="price" Type="float" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="type" Type="nvarchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="TransactionItems">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="price" Type="float" Nullable="false" />
+          <Property Name="quantity" Type="int" Nullable="false" />
+          <Property Name="transactionid" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Transactions">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="finalprice" Type="float" Nullable="false" />
+          <Property Name="paymentoption" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="cardnumber" Type="nvarchar" MaxLength="100" />
+          <Property Name="cardexpiration" Type="nvarchar" MaxLength="100" />
+          <Property Name="cardholdername" Type="nvarchar" MaxLength="100" />
+          <Property Name="time" Type="datetime" Nullable="false" />
+          <Property Name="id" Type="uniqueidentifier" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Name="username" Type="nvarchar" Nullable="false" MaxLength="50" />
+          <Property Name="password" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="firstname" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="lastname" Type="nvarchar" Nullable="false" MaxLength="100" />
+          <Property Name="role" Type="nvarchar" Nullable="false" MaxLength="100" />
+        </EntityType>
+        <Association Name="transactionid">
+          <End Role="Transactions" Type="FoodOrderDatabaseModel.Store.Transactions" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="TransactionItems" Type="FoodOrderDatabaseModel.Store.TransactionItems" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transactions">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TransactionItems">
+              <PropertyRef Name="transactionid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="FoodOrderDatabaseModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="FoodOrderDatabaseEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="OrderItems" EntityType="FoodOrderDatabaseModel.OrderItem" />
+          <EntitySet Name="TransactionItems" EntityType="FoodOrderDatabaseModel.TransactionItem" />
+          <EntitySet Name="Transactions" EntityType="FoodOrderDatabaseModel.Transaction" />
+          <EntitySet Name="Users" EntityType="FoodOrderDatabaseModel.User" />
+          <AssociationSet Name="transactionid" Association="FoodOrderDatabaseModel.transactionid">
+            <End Role="Transaction" EntitySet="Transactions" />
+            <End Role="TransactionItem" EntitySet="TransactionItems" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="OrderItem">
+          <Key>
+            <PropertyRef Name="id" />
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <Property Type="String" Name="name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="price" Nullable="false" />
+          <Property Type="Int32" Name="quantity" Nullable="false" />
+          <Property Type="String" Name="type" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TransactionItem">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="String" Name="name" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="Double" Name="price" Nullable="false" />
+          <Property Type="Int32" Name="quantity" Nullable="false" />
+          <Property Type="Guid" Name="transactionid" Nullable="false" />
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <NavigationProperty Name="Transaction" Relationship="FoodOrderDatabaseModel.transactionid" FromRole="TransactionItem" ToRole="Transaction" />
+        </EntityType>
+        <EntityType Name="Transaction">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Type="Double" Name="finalprice" Nullable="false" />
+          <Property Type="String" Name="paymentoption" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="cardnumber" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="cardexpiration" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="cardholdername" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="DateTime" Name="time" Nullable="false" />
+          <Property Type="Guid" Name="id" Nullable="false" />
+          <NavigationProperty Name="TransactionItems" Relationship="FoodOrderDatabaseModel.transactionid" FromRole="Transaction" ToRole="TransactionItem" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="username" />
+          </Key>
+          <Property Type="String" Name="username" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="password" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="firstname" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="lastname" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Type="String" Name="role" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <Association Name="transactionid">
+          <End Type="FoodOrderDatabaseModel.Transaction" Role="Transaction" Multiplicity="1" />
+          <End Type="FoodOrderDatabaseModel.TransactionItem" Role="TransactionItem" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Transaction">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="TransactionItem">
+              <PropertyRef Name="transactionid" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+    <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="FoodOrderDatabaseModelStoreContainer" CdmEntityContainer="FoodOrderDatabaseEntities">
+          <EntitySetMapping Name="OrderItems">
+            <EntityTypeMapping TypeName="FoodOrderDatabaseModel.OrderItem">
+              <MappingFragment StoreEntitySet="OrderItems">
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TransactionItems">
+            <EntityTypeMapping TypeName="FoodOrderDatabaseModel.TransactionItem">
+              <MappingFragment StoreEntitySet="TransactionItems">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="transactionid" ColumnName="transactionid" />
+                <ScalarProperty Name="quantity" ColumnName="quantity" />
+                <ScalarProperty Name="price" ColumnName="price" />
+                <ScalarProperty Name="name" ColumnName="name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Transactions">
+            <EntityTypeMapping TypeName="FoodOrderDatabaseModel.Transaction">
+              <MappingFragment StoreEntitySet="Transactions">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="time" ColumnName="time" />
+                <ScalarProperty Name="cardholdername" ColumnName="cardholdername" />
+                <ScalarProperty Name="cardexpiration" ColumnName="cardexpiration" />
+                <ScalarProperty Name="cardnumber" ColumnName="cardnumber" />
+                <ScalarProperty Name="paymentoption" ColumnName="paymentoption" />
+                <ScalarProperty Name="finalprice" ColumnName="finalprice" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="FoodOrderDatabaseModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="role" ColumnName="role" />
+                <ScalarProperty Name="lastname" ColumnName="lastname" />
+                <ScalarProperty Name="firstname" ColumnName="firstname" />
+                <ScalarProperty Name="password" ColumnName="password" />
+                <ScalarProperty Name="username" ColumnName="username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+</Mapping></edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="FoodOrderModels" ZoomLevel="76">
+        <EntityTypeShape EntityType="FoodOrderDatabaseModel.OrderItem" Width="1.5" PointX="0.75" PointY="4.75" Height="1.9802864583333388" />
+        <EntityTypeShape EntityType="FoodOrderDatabaseModel.TransactionItem" Width="1.5" PointX="3" PointY="1.125" Height="2.1725878906250031" />
+        <EntityTypeShape EntityType="FoodOrderDatabaseModel.Transaction" Width="1.5" PointX="0.75" PointY="1" Height="2.5571907552083388" />
+        <EntityTypeShape EntityType="FoodOrderDatabaseModel.User" Width="1.5" PointX="2.75" PointY="4.75" Height="1.9802864583333388" />
+        <AssociationConnector Association="FoodOrderDatabaseModel.transactionid" >
+          <ConnectorPoint PointX="2.25" PointY="2.2112939453125016" />
+          <ConnectorPoint PointX="3" PointY="2.2112939453125016" />
+        </AssociationConnector>
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>
